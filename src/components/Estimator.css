@@ -424,6 +424,32 @@
 }
 
 /* Responsive */
+@media (min-width: 1025px) {
+  .estimator-grid-pro {
+    height: calc(100vh - 280px);
+    min-height: 520px;
+    max-height: 700px;
+    align-items: stretch;
+  }
+  .estimator-visualizer-section,
+  .estimator-services-section,
+  .estimator-ticket-section {
+    height: 100%;
+    overflow: hidden;
+  }
+  .estimator-options-list {
+    flex: 1;
+    max-height: none !important;
+  }
+  .ticket-body-scrollable {
+    flex: 1;
+    max-height: none !important;
+  }
+  .quote-ticket-metal {
+    height: 100%;
+  }
+}
+
 @media (max-width: 1024px) {
   .estimator-grid-pro {
     grid-template-columns: 1fr;

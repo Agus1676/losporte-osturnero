@@ -46,7 +46,7 @@
   transition: all 0.3s ease;
 }
 
-.glow-path-cyan, .glow-path-yellow, .glow-path-orange {
+.glow-path-cyan, .glow-path-yellow, .glow-path-orange, .glow-path-red {
   fill: transparent;
   stroke: transparent;
   stroke-width: 2.5;
@@ -75,6 +75,11 @@
   fill: rgba(255, 159, 10, 0.04);
 }
 
+.car-interactive-part:not(.disabled):hover .glow-path-red {
+  stroke: var(--danger-red);
+  fill: rgba(255, 69, 58, 0.04);
+}
+
 /* Active / Selected States */
 .car-interactive-part.active .part-svg-label {
   fill: var(--text-primary);
@@ -99,6 +104,12 @@
   filter: url(#neon-glow-orange);
 }
 
+.car-interactive-part.active .glow-path-red {
+  stroke: var(--danger-red);
+  fill: rgba(255, 69, 58, 0.08);
+  filter: url(#neon-glow-red);
+}
+
 /* Has Services Added States */
 .car-interactive-part.has-services:not(.active):not(.disabled) .glow-path-cyan {
   stroke: var(--electric-cyan);
@@ -119,6 +130,13 @@
   stroke-width: 1.5;
   stroke-dasharray: 4 2;
   fill: rgba(255, 159, 10, 0.02);
+}
+
+.car-interactive-part.has-services:not(.active):not(.disabled) .glow-path-red {
+  stroke: var(--danger-red);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  fill: rgba(255, 69, 58, 0.02);
 }
 
 /* Especializaciones Gráficas */
@@ -289,10 +307,17 @@
   left: 30px;
 }
 
-.badge-bodywork {
+.badge-chapa {
   background-color: var(--neon-orange);
   box-shadow: var(--yellow-glow);
   bottom: 95px;
+  right: 25px;
+}
+
+.badge-paint {
+  background-color: var(--danger-red);
+  box-shadow: 0 0 8px rgba(255, 69, 58, 0.5);
+  bottom: 60px;
   right: 25px;
 }
 

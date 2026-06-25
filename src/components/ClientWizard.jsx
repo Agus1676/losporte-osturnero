@@ -1,10 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, ChevronRight, ChevronLeft, Bolt, Zap, Paintbrush, HelpCircle, Printer } from 'lucide-react';
+import { CheckCircle2, ChevronRight, ChevronLeft, Bolt, Zap, Paintbrush, HelpCircle, Printer, X } from 'lucide-react';
 import CarVisualizer from './CarVisualizer';
 import CalendarPicker from './CalendarPicker';
 import MetalTicket from './MetalTicket';
 import './ClientWizard.css';
+
+const analyzeSymptoms = (text) => {
+  const t = text.toLowerCase();
+  const selected = [];
+  const partsToSelect = new Set();
+
+  if (t.includes('arranc') || t.includes('bater') || t.includes('carga') || t.includes('alterna') || t.includes('bendix') || t.includes('fuga') || t.includes('corrient')) {
+    partsToSelect.add('battery');
+    selected.push({ id: "bat-replace", name: "Batería Moura 12V 75Ah (Colocada)", price: 95000, part: "battery" });
+  }
+  if (t.includes('luz') || t.includes('luces') || t.includes('faro') || t.includes('optic') || t.includes('led') || t.includes('xenon') || t.includes('auxiliar') || t.includes('alinea')) {
+    partsToSelect.add('lighting');
+    selected.push({ id: "lit-led", name: "Instalación de Kit Cree LED Canbus", price: 22000, part: "lighting" });
+  }
+  if (t.includes('ecu') || t.includes('computa') || t.includes('inyecc') || t.includes('scan') || t.includes('escan') || t.includes('sensor') || t.includes('llave') || t.includes('chip')) {
+    partsToSelect.add('ecu');
+    selected.push({ id: "ecu-scan", name: "Escaneo Computarizado Completo", price: 25000, part: "ecu" });
+  }
+  if (t.includes('aire') || t.includes('ac') || t.includes('alzacrista') || t.includes('vidrio') || t.includes('cierre') || t.includes('alarma') || t.includes('motor de puerta') || t.includes('clima')) {
+    partsToSelect.add('comfort');
+    selected.push({ id: "com-alarm", name: "Instalación de Alarma Volumétrica", price: 75000, part: "comfort" });
+  }
+  if (t.includes('choque') || t.includes('aboll') || t.includes('bollo') || t.includes('golpe') || t.includes('sacabol') || t.includes('paragolp') || t.includes('chapa') || t.includes('guardabar')) {
+    partsToSelect.add('chapa');
+    selected.push({ id: "bod-dent", name: "Sacabollos Artesanal (PDR)", price: 35000, part: "chapa" });
+  }
+  if (t.includes('pintu') || t.includes('pulid') || t.includes('lustra') || t.includes('brill') || t.includes('acrilic') || t.includes('rayo') || t.includes('raspa') || t.includes('rayon')) {
+    partsToSelect.add('paint');
+    selected.push({ id: "bod-paint", name: "Pintura por Paño / Panel", price: 75000, part: "paint" });
+  }
+
+  if (partsToSelect.size === 0) {
+    partsToSelect.add('ecu');
+    selected.push({ id: "ecu-scan", name: "Escaneo Computarizado Completo", price: 25000, part: "ecu" });
+  }
+
+  return {
+    parts: Array.from(partsToSelect),
+    services: selected
+  };
+};
 
 const SERVICES_DATA = {
   battery: {
@@ -47,14 +88,20 @@ const SERVICES_DATA = {
       { id: "com-ac", name: "Carga y Control de Aire Acondicionado", desc: "Detección de fugas con contraste y carga de gas R134", price: 38000, part: "comfort" }
     ]
   },
-  bodywork: {
-    title: "Chapa, Pintura & Estética",
-    desc: "Sacabollos artesanal, pintura por paneles, tratamientos de brillo y plásticos.",
+  chapa: {
+    title: "Chapa & Paragolpes",
+    desc: "Sacabollos artesanal (PDR) y soldadura de paragolpes plásticos.",
     options: [
-      { id: "bod-paint", name: "Pintura por Paño / Panel", desc: "Preparación de superficie, pintura bicapa y laca premium", price: 75000, part: "bodywork" },
-      { id: "bod-dent", name: "Sacabollos Artesanal (PDR)", desc: "Desabollo en frío sin dañar la pintura original", price: 35000, part: "bodywork" },
-      { id: "bod-polish", name: "Tratamiento Acrílico & Lustrado", desc: "Pulido en 3 etapas para eliminar rayas y sellador protector", price: 55000, part: "bodywork" },
-      { id: "bod-bumper", name: "Reparación y Soldadura de Paragolpes", desc: "Costura plástica y pintura del paragolpes dañado", price: 40000, part: "bodywork" }
+      { id: "bod-dent", name: "Sacabollos Artesanal (PDR)", desc: "Desabollo en frío sin dañar la pintura original", price: 35000, part: "chapa" },
+      { id: "bod-bumper", name: "Reparación y Soldadura de Paragolpes", desc: "Costura plástica y reparación de paragolpes dañado", price: 40000, part: "chapa" }
+    ]
+  },
+  paint: {
+    title: "Pintura & Estética",
+    desc: "Pintura de paneles con laca premium y tratamientos de brillo acrílico.",
+    options: [
+      { id: "bod-paint", name: "Pintura por Paño / Panel", desc: "Preparación de superficie, pintura bicapa y laca premium", price: 75000, part: "paint" },
+      { id: "bod-polish", name: "Tratamiento Acrílico & Lustrado", desc: "Pulido en 3 etapas para eliminar rayas y sellador protector", price: 55000, part: "paint" }
     ]
   }
 };
@@ -63,14 +110,14 @@ export default function ClientWizard({ onSubmitBooking, turnsList, onPrintTurn, 
   const [step, setStep] = useState(1);
   const [serviceCategory, setServiceCategory] = useState(null); // 'electrical' | 'bodywork'
   
-  // Estados para el Asistente Inteligente
+  // Estados para el Asistente de IA
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [aiSymptom, setAiSymptom] = useState('');
+  const [aiStep, setAiStep] = useState('input'); // 'input' | 'scanning' | 'results'
+  const [aiResults, setAiResults] = useState(null);
+  
+  // Mantenemos showAssistant para evitar errores pero forzamos false
   const [showAssistant, setShowAssistant] = useState(false);
-  const [assistantStep, setAssistantStep] = useState(0);
-  const [assistantAnswers, setAssistantAnswers] = useState({
-    starts: null,      // yes | no
-    electrical: null,  // yes | no
-    bodywork: null     // yes | no
-  });
 
   const [selectedPart, setSelectedPart] = useState(null);
   const [selectedServices, setSelectedServices] = useState([]);
@@ -85,6 +132,27 @@ export default function ClientWizard({ onSubmitBooking, turnsList, onPrintTurn, 
   });
   const [barcode, setBarcode] = useState('');
   const [success, setSuccess] = useState(false);
+
+  const handleAiScan = () => {
+    setAiStep('scanning');
+    setTimeout(() => {
+      const results = analyzeSymptoms(aiSymptom);
+      setAiResults(results);
+      setAiStep('results');
+    }, 2500);
+  };
+
+  const handleApplyAiDiagnostic = () => {
+    if (!aiResults) return;
+    setSelectedServices(aiResults.services);
+    const hasBodywork = aiResults.services.some(s => s.id.startsWith('bod'));
+    setServiceCategory(hasBodywork ? 'bodywork' : 'electrical');
+    if (aiResults.parts.length > 0) {
+      setSelectedPart(aiResults.parts[0]);
+    }
+    setShowAiModal(false);
+    setStep(2);
+  };
 
   useEffect(() => {
     if (preloadedServices && preloadedServices.length > 0) {
@@ -132,8 +200,8 @@ export default function ClientWizard({ onSubmitBooking, turnsList, onPrintTurn, 
     if (answers.bodywork === 'yes') {
       // Prioridad a Chapa y Pintura si tiene daños visuales directos
       category = 'bodywork';
-      suggested.push(SERVICES_DATA.bodywork.options.find(o => o.id === 'bod-dent')); // Sacabollos
-      setSelectedPart('bodywork');
+      suggested.push(SERVICES_DATA.chapa.options.find(o => o.id === 'bod-dent')); // Sacabollos
+      setSelectedPart('chapa');
     } else if (answers.starts === 'no') {
       category = 'electrical';
       suggested.push(SERVICES_DATA.battery.options.find(o => o.id === 'bat-replace')); // Batería
@@ -369,14 +437,18 @@ export default function ClientWizard({ onSubmitBooking, turnsList, onPrintTurn, 
 
                       <div 
                         className="category-card-pro assistant-card-pro"
-                        onClick={startAssistant}
+                        onClick={() => {
+                          setShowAiModal(true);
+                          setAiStep('input');
+                          setAiSymptom('');
+                        }}
                         style={{ gridColumn: '1 / -1', maxWidth: '100%', borderStyle: 'dashed' }}
                       >
                         <div className="category-icon bg-yellow">
                           <HelpCircle size={32} />
                         </div>
-                        <h3>No sé qué tiene mi auto (Asistente)</h3>
-                        <p>Te haremos 3 preguntas sencillas para determinar qué especialidad y servicio requiere tu vehículo.</p>
+                        <h3>Diagnóstico por IA (Symptom Analyzer) 🤖</h3>
+                        <p>Describí qué le sucede a tu vehículo. Nuestro scanner digital procesará tus síntomas y te recomendará los servicios necesarios de manera inmediata.</p>
                       </div>
                     </div>
                   </div>
@@ -657,6 +729,115 @@ export default function ClientWizard({ onSubmitBooking, turnsList, onPrintTurn, 
             {step === 5 ? 'Confirmar Turno' : 'Siguiente'}
             <ChevronRight size={18} />
           </button>
+        </div>
+      )}
+
+      {/* Modal de Diagnóstico por IA Holográfico */}
+      {showAiModal && (
+        <div className="ai-modal-overlay">
+          <div className="ai-modal-card">
+            <div className="ai-modal-header">
+              <div className="ai-title-glow">
+                <span className="ai-chip">OBD3 INTELLIGENT DIAGNOSTIC</span>
+                <h3>Scanner de Síntomas por IA</h3>
+              </div>
+              <button type="button" onClick={() => setShowAiModal(false)} className="ai-close-btn">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="ai-modal-body">
+              {aiStep === 'input' && (
+                <div className="ai-input-view">
+                  <p>Escribí a continuación los problemas de tu automóvil. El sistema buscará zonas eléctricas, mecánicas o de chapa y pintura comprometidas.</p>
+                  <textarea 
+                    value={aiSymptom}
+                    onChange={(e) => setAiSymptom(e.target.value)}
+                    placeholder="Ej: Tengo una raspadura de pintura en la puerta y el motor de arranque hace un ruido extraño cuando quiero darle marcha..."
+                    rows={4}
+                    className="ai-textarea"
+                  />
+                  <button 
+                    type="button" 
+                    onClick={handleAiScan}
+                    disabled={!aiSymptom.trim()}
+                    className="btn-primary ai-scan-trigger-btn"
+                  >
+                    Iniciar Análisis OBD3 🧬
+                  </button>
+                </div>
+              )}
+
+              {aiStep === 'scanning' && (
+                <div className="ai-scanning-view">
+                  <div className="hologram-scanner">
+                    <div className="scanning-line"></div>
+                    <div className="atom-spinner">⚛️</div>
+                  </div>
+                  <h4 className="scanning-title">Procesando Síntomas...</h4>
+                  <div className="scanning-logs">
+                    <span className="scan-log-line">&gt; Conectando al simulador OBD3...</span>
+                    <span className="scan-log-line">&gt; Procesando descripción del propietario...</span>
+                    <span className="scan-log-line">&gt; Reconociendo zonas (Chapa, Pintura, Faros, Batería)...</span>
+                    <span className="scan-log-line">&gt; Calculando cotización recomendada...</span>
+                  </div>
+                </div>
+              )}
+
+              {aiStep === 'results' && aiResults && (
+                <div className="ai-results-view">
+                  <div className="ai-success-badge">ANÁLISIS FINALIZADO</div>
+                  
+                  <h4>Zonas Mecánicas Afectadas:</h4>
+                  <div className="ai-result-zones">
+                    {aiResults.parts.map(p => {
+                      const label = p === 'battery' ? 'Carga y Batería' :
+                                    p === 'lighting' ? 'Iluminación' :
+                                    p === 'ecu' ? 'Inyección/ECU' :
+                                    p === 'comfort' ? 'Confort y Alarma' :
+                                    p === 'chapa' ? 'Chapa y Paragolpes' : 'Pintura y Estética';
+                      const color = p.startsWith('chapa') || p.startsWith('paint') ? 'var(--neon-orange)' : 'var(--electric-cyan)';
+                      return (
+                        <span key={p} className="ai-result-zone-pill" style={{ borderColor: color, color: color }}>
+                          {label}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  <h4>Servicios Pre-cargados Sugeridos:</h4>
+                  <div className="ai-result-services">
+                    {aiResults.services.map(s => (
+                      <div key={s.id} className="ai-suggested-service-card">
+                        <div className="as-srv-txt">
+                          <strong>{s.name}</strong>
+                          <span>{s.desc}</span>
+                        </div>
+                        <span className="as-srv-price">${s.price.toLocaleString("es-AR")}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="ai-results-actions">
+                    <button 
+                      type="button" 
+                      onClick={handleApplyAiDiagnostic} 
+                      className="btn-primary apply-ai-btn"
+                    >
+                      Aplicar y Ver Detalles
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setAiStep('input')} 
+                      className="btn-secondary"
+                    >
+                      Re-analizar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

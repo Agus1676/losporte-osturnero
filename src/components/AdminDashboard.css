@@ -263,6 +263,59 @@
   color: var(--text-secondary);
 }
 
+.kanban-search-bar-container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.kanban-search-box {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.kanban-search-input {
+  width: 100%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.6rem 2.2rem 0.6rem 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: all 0.25s ease;
+}
+
+.kanban-search-input:focus {
+  outline: none;
+  border-color: var(--electric-cyan);
+  box-shadow: var(--cyan-glow);
+  background-color: rgba(26, 29, 41, 0.6);
+}
+
+.kanban-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.kanban-search-clear:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
 .kanban-columns-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -918,3 +971,256 @@
     display: none;
   }
 }
+
+/* ==========================================================================
+   CONSOLA DE NOTIFICACIONES TERMINAL STYLES
+   ========================================================================== */
+.terminal-console-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.console-channel-filters {
+  display: flex;
+  gap: 0.35rem;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  padding: 0.2rem;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.console-filter-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+}
+
+.console-filter-btn:hover {
+  color: var(--text-primary);
+}
+
+.console-filter-btn.active {
+  background-color: var(--border-color);
+  color: var(--electric-cyan);
+}
+
+.console-clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.console-clear-btn:hover {
+  color: var(--danger-red);
+  background-color: rgba(255, 69, 58, 0.08);
+}
+
+.console-terminal-screen {
+  position: relative;
+  background-color: #050806;
+  border: 1.5px solid #1a3320;
+  border-radius: 12px;
+  padding: 0.85rem;
+  height: 180px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 15px rgba(48, 209, 88, 0.02);
+}
+
+.console-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.3) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.console-text-container {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #33ff33;
+  text-shadow: 0 0 4px rgba(51, 255, 51, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.console-log-row {
+  display: flex;
+  gap: 0.4rem;
+  cursor: pointer;
+  padding: 0.15rem 0.25rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  transition: all 0.15s ease;
+}
+
+.console-log-row:hover {
+  background-color: rgba(51, 255, 51, 0.08);
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.8);
+}
+
+.console-log-row .log-time {
+  color: #88ff88;
+}
+
+.console-log-row .log-channel {
+  font-weight: 700;
+}
+
+.console-log-row .log-channel.whatsapp {
+  color: #25d366;
+}
+
+.console-log-row .log-channel.sms {
+  color: #ffd60a;
+}
+
+.console-log-row .log-channel.email {
+  color: #00f0ff;
+}
+
+.console-log-row .log-desc {
+  color: #ccffcc;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.console-empty-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #1a5c20;
+}
+
+.blink-cursor {
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Mockup Email y SMS */
+.email-client-mockup {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+  font-family: inherit;
+}
+
+.email-header-fields {
+  background-color: rgba(255, 255, 255, 0.01);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+}
+
+.email-header-fields span {
+  color: var(--text-secondary);
+  margin-right: 0.25rem;
+}
+
+.email-content-body {
+  background-color: #ffffff;
+  color: #1c1e21;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.email-brand-header {
+  border-bottom: 2px solid #12141c;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+.email-brand-header h2 {
+  font-size: 1.1rem !important;
+  font-weight: 800;
+  color: #12141c !important;
+  margin: 0;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+.email-brand-header span {
+  font-size: 0.6rem;
+  color: #8a90a6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.email-text-area {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #333333;
+}
+
+.email-footer-sign {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #666666;
+}
+
+.email-footer-sign span {
+  font-size: 0.65rem;
+  color: #999999;
+}
+
+.sms-bubble-sent {
+  background-color: #26272b;
+  color: #ffffff;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+  position: relative;
+  padding: 0.5rem 0.75rem 1.1rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  max-width: 90%;
+  line-height: 1.35;
+}
+

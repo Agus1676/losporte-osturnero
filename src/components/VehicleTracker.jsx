@@ -157,8 +157,10 @@ export default function VehicleTracker({ turnsList }) {
                               <div className="step-circle-icon">
                                 <Icon size={18} />
                               </div>
-                              <span className="step-label-txt">{st.label}</span>
-                              <span className="step-desc-txt">{st.desc}</span>
+                              <div className="step-text-wrapper">
+                                <span className="step-label-txt">{st.label}</span>
+                                <span className="step-desc-txt">{st.desc}</span>
+                              </div>
                             </div>
                           );
                         })}
@@ -185,6 +187,65 @@ export default function VehicleTracker({ turnsList }) {
                         </div>
                       </div>
                     </div>
+
+                    {/* Bitácora de Progreso Visual de Taller */}
+                    <div className="status-progress-feed">
+                      <h4>Bitácora del Taller (Visual Feed)</h4>
+                      <p className="feed-subtitle">Registro cronológico de trabajos realizados y capturas del proceso en tiempo real.</p>
+                      
+                      <div className="feed-grid-pro">
+                        {Array.from({ length: foundTurn.trackingStage || 1 }).map((_, index) => {
+                          const stepNum = index + 1;
+                          const stageInfo = STAGES.find(s => s.step === stepNum);
+                          if (!stageInfo) return null;
+                          
+                          // Custom description logs and cam tags
+                          const logsData = {
+                            1: { cam: "CAM_01_LOBBY", log: "Vehículo ingresado al taller. Check-in de recepción completado con fotos de peritaje inicial cargadas." },
+                            2: { cam: "CAM_02_OBD3", log: "Scanner OBD3 conectado. Lectura de parámetros de motor completa. Diagnóstico de circuitos y batería completado." },
+                            3: { cam: "CAM_03_BODY", log: "Reparación estructural activa. Trabajo de sacabollos artesanal y soldadura plástica sobre paneles afectados." },
+                            4: { cam: "CAM_04_SPRAY", log: "Vehículo ingresa a cabina presurizada. Aplicación de base de color y laca protectora premium con curado a 60°C." },
+                            5: { cam: "CAM_05_QUALITY", log: "Control de calidad activo. Revisión óptica de paneles pintados, testeo de luces y borrado de fallas secundarias." },
+                            6: { cam: "CAM_06_LOBBY", log: "Lavado final e inspección de entrega. Llave codificada y documentación lista. El auto espera a su propietario." }
+                          };
+
+                          const currentLog = logsData[stepNum] || { cam: "CAM_00", log: "Operación en curso..." };
+
+                          return (
+                            <div key={stepNum} className="feed-card-pro">
+                              <div className="feed-camera-feed">
+                                <div className="camera-overlay-header">
+                                  <span className="cam-tag">{currentLog.cam}</span>
+                                  <span className="cam-live-indicator">● REC</span>
+                                </div>
+                                
+                                {/* Representación Gráfica CSS Premium */}
+                                <div className={`hologram-visualizer-feed stage-visual-${stepNum}`}>
+                                  <div className="scanline-feed"></div>
+                                  <div className="visual-graphic-container">
+                                    {stepNum === 1 && <ClipboardList className="visual-svg-icon cyan" size={42} />}
+                                    {stepNum === 2 && <ShieldAlert className="visual-svg-icon yellow" size={42} />}
+                                    {stepNum === 3 && <Wrench className="visual-svg-icon orange" size={42} />}
+                                    {stepNum === 4 && <Paintbrush className="visual-svg-icon red" size={42} />}
+                                    {stepNum === 5 && <ShieldCheck className="visual-svg-icon green" size={42} />}
+                                    {stepNum === 6 && <CheckCircle2 className="visual-svg-icon cyan" size={42} />}
+                                  </div>
+                                </div>
+                                
+                                <div className="camera-timestamp">
+                                  {foundTurn.date} — {stepNum === foundTurn.trackingStage ? foundTurn.time : "09:00"} hs
+                                </div>
+                              </div>
+                              <div className="feed-card-info">
+                                <h5>Etapa {stepNum}: {stageInfo.label}</h5>
+                                <p>{currentLog.log}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                   </div>
                 ) : (
                   <div className="no-active-order-sheet">

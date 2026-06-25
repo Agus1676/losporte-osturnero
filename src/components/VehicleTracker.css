@@ -172,6 +172,12 @@
   width: 14%;
 }
 
+.step-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: inherit;
+}
+
 .step-circle-icon {
   width: 48px;
   height: 48px;
@@ -338,6 +344,10 @@
     width: 100%;
     gap: 1rem;
     text-align: left;
+    align-items: center;
+  }
+  .step-text-wrapper {
+    align-items: flex-start;
   }
   .step-label-txt {
     margin-top: 0;
@@ -603,5 +613,208 @@
 .tracker-results-wrapper-pro {
   display: flex;
   flex-direction: column;
+}
+
+/* ==========================================================================
+   BITÁCORA DE PROGRESO DE TALLER (LIVE FEED)
+   ========================================================================== */
+.status-progress-feed {
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+
+.status-progress-feed h4 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.5px;
+}
+
+.feed-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.feed-grid-pro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .feed-grid-pro {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feed-card-pro {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.feed-card-pro:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.feed-camera-feed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background-color: #050608;
+  overflow: hidden;
+}
+
+.camera-overlay-header {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.cam-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  background-color: rgba(10, 11, 13, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.cam-live-indicator {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--danger-red);
+  background-color: rgba(255, 69, 58, 0.15);
+  border: 1px solid rgba(255, 69, 58, 0.3);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.camera-timestamp {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+  background-color: rgba(10, 11, 13, 0.5);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* Hologram Visualizer Feed stage visuals */
+.hologram-visualizer-feed {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: 15px 15px;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+}
+
+.hologram-visualizer-feed.stage-visual-1 {
+  background-color: rgba(0, 114, 255, 0.03);
+}
+.hologram-visualizer-feed.stage-visual-2 {
+  background-color: rgba(0, 240, 255, 0.03);
+}
+.hologram-visualizer-feed.stage-visual-3 {
+  background-color: rgba(255, 159, 10, 0.03);
+}
+.hologram-visualizer-feed.stage-visual-4 {
+  background-color: rgba(255, 69, 58, 0.03);
+}
+.hologram-visualizer-feed.stage-visual-5 {
+  background-color: rgba(48, 209, 88, 0.03);
+}
+.hologram-visualizer-feed.stage-visual-6 {
+  background-color: rgba(0, 240, 255, 0.03);
+}
+
+.scanline-feed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.06), 
+    rgba(0, 255, 0, 0.02), 
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+}
+
+.visual-graphic-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.visual-svg-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+.visual-svg-icon.cyan { color: var(--electric-cyan); }
+.visual-svg-icon.yellow { color: var(--neon-yellow); }
+.visual-svg-icon.orange { color: var(--neon-orange); }
+.visual-svg-icon.red { color: var(--danger-red); }
+.visual-svg-icon.green { color: var(--success-green); }
+
+.feed-card-info {
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.feed-card-info h5 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.feed-card-info p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
 }
 

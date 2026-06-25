@@ -1,16 +1,142 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, AlertTriangle, BadgeDollarSign, Radio, HardDrive, MessageSquare, Copy, Send, X, BarChart3, ChevronDown, ChevronUp, Printer } from 'lucide-react';
+import { Users, AlertTriangle, BadgeDollarSign, Radio, HardDrive, MessageSquare, Copy, Send, X, BarChart3, ChevronDown, ChevronUp, Printer, Mail, Smartphone, Trash2 } from 'lucide-react';
 import './AdminDashboard.css';
 
 export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdateTurnStage, onPrintTurn, logs, onAddLog }) {
   // Drag-and-drop state
   const [draggedId, setDraggedId] = useState(null);
   
-  // Estados para WhatsApp y Estadísticas
+  // Estados para WhatsApp, Estadísticas y Búsqueda
   const [notifyTurn, setNotifyTurn] = useState(null);
   const [showStats, setShowStats] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Consola de Notificaciones Simuladas
+  const [notificationLogs, setNotificationLogs] = useState(() => {
+    const saved = localStorage.getItem('los_portenos_notification_logs');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [consoleFilter, setConsoleFilter] = useState('all');
+  const [viewingNotification, setViewingNotification] = useState(null);
+
+  const prevTurnsRef = useRef([]);
+
+  useEffect(() => {
+    localStorage.setItem('los_portenos_notification_logs', JSON.stringify(notificationLogs));
+  }, [notificationLogs]);
+
+  const createNotificationLog = (turn, type, prevVal) => {
+    const timestamp = new Date().toLocaleTimeString("es-AR", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const dateStamp = new Date().toLocaleDateString("es-AR");
+    
+    let channel = 'whatsapp';
+    let title = '';
+    let message = '';
+
+    if (type === 'created') {
+      channel = 'email';
+      title = 'Confirmación de Turno Creado';
+      message = `Hola ${turn.name}, tu turno para el día ${turn.date} a las ${turn.time} hs ha sido reservado. Código de Orden: ${turn.id}.`;
+    } else if (type === 'status_changed') {
+      if (turn.status === 'in-progress') {
+        channel = 'sms';
+        title = 'Ingreso a Elevador';
+        message = `LOS PORTEÑOS: Tu auto ${turn.carModel} (${turn.carPlate}) ya está en elevador. Seguimiento en vivo: lp-turnos.com/t/${turn.carPlate}`;
+      } else if (turn.status === 'completed') {
+        channel = 'whatsapp';
+        title = 'Vehículo Terminado';
+        message = `¡Hola ${turn.name}! Tu ${turn.carModel} (${turn.carPlate}) está listo para retirar. Costo total: $${turn.totalPrice.toLocaleString("es-AR")}. ¡Te esperamos!`;
+      } else {
+        channel = 'whatsapp';
+        title = 'Actualización de Estado';
+        message = `Hola ${turn.name}, tu orden ${turn.id} pasó a estado: Pendiente de Ingreso.`;
+      }
+    } else if (type === 'stage_changed') {
+      const stageLabels = {
+        2: 'En Diagnóstico',
+        3: 'Chapa/Reparación',
+        4: 'Cabina de Pintura',
+        5: 'Control de Calidad',
+        6: 'Listo para Entrega'
+      };
+      const label = stageLabels[turn.trackingStage] || 'Actualización';
+      
+      if (turn.trackingStage === 4) {
+        channel = 'email';
+        title = `Ingreso a ${label}`;
+        message = `Hola ${turn.name}, te informamos que tu vehículo ${turn.carModel} ingresó a la Cabina de Pintura. Detalles: lp-turnos.com/t/${turn.carPlate}`;
+      } else {
+        channel = 'sms';
+        title = `Fase de ${label}`;
+        message = `LOS PORTEÑOS: Tu vehículo ingresó a la etapa de ${label}. Seguimiento: lp-turnos.com/t/${turn.carPlate}`;
+      }
+    }
+
+    return {
+      id: `NOT-${Math.floor(100000 + Math.random() * 900000)}`,
+      turnId: turn.id,
+      name: turn.name,
+      carPlate: turn.carPlate,
+      carModel: turn.carModel,
+      totalPrice: turn.totalPrice,
+      date: turn.date,
+      time: turn.time,
+      type,
+      channel,
+      title,
+      message,
+      timestamp,
+      dateStamp,
+      status: 'sent'
+    };
+  };
+
+  useEffect(() => {
+    if (prevTurnsRef.current.length === 0) {
+      prevTurnsRef.current = turnsList;
+      return;
+    }
+
+    const newLogs = [];
+
+    turnsList.forEach(currentTurn => {
+      const prevTurn = prevTurnsRef.current.find(t => t.id === currentTurn.id);
+
+      if (!prevTurn) {
+        newLogs.push(createNotificationLog(currentTurn, 'created'));
+      } else {
+        if (prevTurn.status !== currentTurn.status) {
+          newLogs.push(createNotificationLog(currentTurn, 'status_changed', prevTurn.status));
+        } else if (prevTurn.trackingStage !== currentTurn.trackingStage) {
+          newLogs.push(createNotificationLog(currentTurn, 'stage_changed', prevTurn.trackingStage));
+        }
+      }
+    });
+
+    if (newLogs.length > 0) {
+      setNotificationLogs(prev => [...newLogs, ...prev].slice(0, 50));
+    }
+
+    prevTurnsRef.current = turnsList;
+  }, [turnsList]);
+
+  const filteredConsoleLogs = notificationLogs.filter(log => {
+    if (consoleFilter === 'all') return true;
+    return log.channel === consoleFilter;
+  });
+
+  const filteredTurns = turnsList.filter(t => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return true;
+    return (
+      (t.name || '').toLowerCase().includes(term) ||
+      (t.phone || '').toLowerCase().includes(term) ||
+      (t.carPlate || '').toLowerCase().includes(term) ||
+      (t.carModel || '').toLowerCase().includes(term)
+    );
+  });
 
   const getKPIs = () => {
     const total = turnsList.length;
@@ -90,6 +216,25 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
     const phoneWithCountry = cleanPhone.length === 10 ? `549${cleanPhone}` : cleanPhone;
     const url = `https://api.whatsapp.com/send?phone=${phoneWithCountry}&text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
+
+    const manualLog = {
+      id: `NOT-${Math.floor(100000 + Math.random() * 900000)}`,
+      turnId: turn.id,
+      name: turn.name,
+      carPlate: turn.carPlate,
+      carModel: turn.carModel,
+      totalPrice: turn.totalPrice,
+      date: turn.date,
+      time: turn.time,
+      type: 'manual_wa',
+      channel: 'whatsapp',
+      title: 'Notificación Manual',
+      message: text,
+      timestamp: new Date().toLocaleTimeString("es-AR", { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      dateStamp: new Date().toLocaleDateString("es-AR"),
+      status: 'sent'
+    };
+    setNotificationLogs(prev => [manualLog, ...prev].slice(0, 50));
   };
 
   // --- Lógica de Estadísticas (SVG Gráficos) ---
@@ -283,6 +428,28 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
             <p>Arrastrá y soltá las tarjetas para mover los vehículos en reparación.</p>
           </div>
 
+          {/* Buscador de personas por patente, nombre o teléfono */}
+          <div className="kanban-search-bar-container">
+            <div className="kanban-search-box">
+              <input 
+                type="text" 
+                placeholder="Buscar cliente por nombre, teléfono o patente..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="kanban-search-input"
+              />
+              {searchTerm && (
+                <button 
+                  type="button" 
+                  onClick={() => setSearchTerm('')} 
+                  className="kanban-search-clear"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="kanban-columns-grid">
             {/* Columna: Pendientes */}
             <div 
@@ -292,11 +459,11 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
             >
               <div className="column-title-pro">
                 <h4>PENDIENTES DE INGRESO</h4>
-                <span className="column-badge">{turnsList.filter(t => t.status === 'pending').length}</span>
+                <span className="column-badge">{filteredTurns.filter(t => t.status === 'pending').length}</span>
               </div>
               <div className="kanban-cards-stack">
                 <AnimatePresence>
-                  {turnsList
+                  {filteredTurns
                     .filter(t => t.status === 'pending')
                     .map(turn => (
                       <motion.div
@@ -355,11 +522,11 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
             >
               <div className="column-title-pro">
                 <h4>EN REPARACIÓN / ELEVADOR</h4>
-                <span className="column-badge">{turnsList.filter(t => t.status === 'in-progress').length}</span>
+                <span className="column-badge">{filteredTurns.filter(t => t.status === 'in-progress').length}</span>
               </div>
               <div className="kanban-cards-stack">
                 <AnimatePresence>
-                  {turnsList
+                  {filteredTurns
                     .filter(t => t.status === 'in-progress')
                     .map(turn => (
                       <motion.div
@@ -440,11 +607,11 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
             >
               <div className="column-title-pro">
                 <h4>TERMINADOS / RETIRO</h4>
-                <span className="column-badge">{turnsList.filter(t => t.status === 'completed').length}</span>
+                <span className="column-badge">{filteredTurns.filter(t => t.status === 'completed').length}</span>
               </div>
               <div className="kanban-cards-stack">
                 <AnimatePresence>
-                  {turnsList
+                  {filteredTurns
                     .filter(t => t.status === 'completed')
                     .map(turn => (
                       <motion.div
@@ -549,6 +716,69 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
               )}
             </div>
           </div>
+
+          {/* Consola de Notificaciones Simuladas */}
+          <div className="side-card-pro terminal-console-card">
+            <div className="side-card-header">
+              <Radio size={18} className="side-icon-live glow-green" />
+              <h4>Consola de Envío de Mensajes 📡</h4>
+            </div>
+
+            <div className="console-channel-filters">
+              {['all', 'whatsapp', 'sms', 'email'].map(ch => (
+                <button
+                  type="button"
+                  key={ch}
+                  onClick={() => setConsoleFilter(ch)}
+                  className={`console-filter-btn ${consoleFilter === ch ? 'active' : ''}`}
+                >
+                  {ch === 'all' ? 'TODOS' : ch === 'whatsapp' ? 'WA' : ch.toUpperCase()}
+                </button>
+              ))}
+              <button 
+                type="button" 
+                onClick={() => {
+                  setNotificationLogs([]);
+                  localStorage.removeItem('los_portenos_notification_logs');
+                }}
+                className="console-clear-btn"
+                title="Limpiar Consola"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+
+            <div className="console-terminal-screen">
+              <div className="console-scanline"></div>
+              <div className="console-text-container">
+                {filteredConsoleLogs.length > 0 ? (
+                  filteredConsoleLogs.map((log) => {
+                    return (
+                      <div 
+                        key={log.id} 
+                        className="console-log-row"
+                        onClick={() => setViewingNotification(log)}
+                        title="Hacé click para ver detalle holográfico"
+                      >
+                        <span className="log-time">[{log.timestamp}]</span>
+                        <span className={`log-channel ${log.channel}`}>
+                          [{log.channel.toUpperCase()}]
+                        </span>
+                        <span className="log-desc">
+                          {log.carPlate} - "{log.title}"
+                        </span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="console-empty-screen">
+                    <span className="blink-cursor">&gt; ESCUCHANDO TRANSMISIONES...</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -639,6 +869,103 @@ export default function AdminDashboard({ turnsList, onUpdateTurnStatus, onUpdate
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* --- MODAL DETALLE DE NOTIFICACIÓN HOLOGRÁFICA --- */}
+      <AnimatePresence>
+        {viewingNotification && (
+          <div className="wa-modal-overlay" onClick={() => setViewingNotification(null)}>
+            <div className="wa-modal-card" onClick={(e) => e.stopPropagation()}>
+              <div className="wa-modal-header">
+                <h3>Detalle de Notificación Enviada</h3>
+                <button type="button" onClick={() => setViewingNotification(null)} className="wa-close-btn">
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="wa-modal-body">
+                {viewingNotification.channel === 'email' ? (
+                  /* Mockup de Email Premium */
+                  <div className="email-client-mockup">
+                    <div className="email-header-fields">
+                      <div><span>De:</span> <strong>Los Porteños &lt;taller@losportenos.com&gt;</strong></div>
+                      <div><span>Para:</span> <strong>{viewingNotification.name} &lt;cliente@correo.com&gt;</strong></div>
+                      <div><span>Asunto:</span> <strong>{viewingNotification.title}</strong></div>
+                    </div>
+                    <div className="email-content-body">
+                      <div className="email-brand-header">
+                        <h2>LOS PORTEÑOS</h2>
+                        <span>Electricidad, Chapa y Pintura</span>
+                      </div>
+                      <div className="email-text-area">
+                        <p>{viewingNotification.message}</p>
+                        <p style={{ marginTop: '1.5rem', color: 'var(--text-secondary)' }}>
+                          Para consultar el estado actual del vehículo patente <strong>{viewingNotification.carPlate}</strong>, ingresá en nuestro portal de seguimiento:<br />
+                          <a href="#" onClick={(e) => e.preventDefault()} style={{ color: 'var(--electric-cyan)', textDecoration: 'underline' }}>
+                            Seguimiento de Reparaciones
+                          </a>
+                        </p>
+                      </div>
+                      <div className="email-footer-sign">
+                        <p>Atentamente,<br /><strong>El Equipo de Los Porteños</strong></p>
+                        <span>Av. del Libertador 4200, CABA</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Mockup de Celular para WA y SMS */
+                  <div className="wa-mockup-phone">
+                    <div className="phone-screen">
+                      <div className="phone-header" style={{ backgroundColor: viewingNotification.channel === 'sms' ? '#1c1e21' : '#075e54' }}>
+                        <div className="phone-avatar" style={{ backgroundColor: viewingNotification.channel === 'sms' ? 'var(--text-secondary)' : '#128c7e', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                          {viewingNotification.channel === 'sms' ? '💬' : 'LP'}
+                        </div>
+                        <div className="phone-contact-info">
+                          <strong style={{ color: '#fff' }}>{viewingNotification.channel === 'sms' ? 'SMS - Los Porteños' : 'Los Porteños'}</strong>
+                          <span style={{ color: '#ccc' }}>{viewingNotification.channel === 'sms' ? 'Mensaje de Texto' : 'En línea'}</span>
+                        </div>
+                      </div>
+                      <div className="phone-chat-area" style={{ backgroundColor: viewingNotification.channel === 'sms' ? '#0d0e10' : '#ece5dd' }}>
+                        <div className={viewingNotification.channel === 'sms' ? 'sms-bubble-sent' : 'chat-bubble-sent'}>
+                          {viewingNotification.message}
+                          <span className="chat-time-tick">
+                            {viewingNotification.timestamp.substring(0, 5)} ✓✓
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="wa-action-details">
+                  <h4>Registro Satelital: {viewingNotification.id}</h4>
+                  <p>Canal de transmisión: <strong>{viewingNotification.channel.toUpperCase()}</strong> | Estado: <strong style={{ color: 'var(--success-green)' }}>Enviado ✓</strong></p>
+                  
+                  <div className="wa-actions-buttons" style={{ marginTop: '1.5rem', justifyContent: 'center' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => handleCopyMessage(viewingNotification.message)} 
+                      className="btn-secondary"
+                      style={{ width: '100%' }}
+                    >
+                      <Copy size={16} />
+                      {copied ? '¡Copiado!' : 'Copiar Texto del Mensaje'}
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setViewingNotification(null)} 
+                      className="btn-primary"
+                      style={{ width: '100%' }}
+                    >
+                      Cerrar Vista
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }

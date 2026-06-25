@@ -10,10 +10,10 @@ export default function CarVisualizer({ selectedPart, onSelectPart, selectedServ
   // Determinar si una sección del auto está deshabilitada según la categoría seleccionada
   const isPartDisabled = (part) => {
     if (category === 'electrical') {
-      return part === 'bodywork';
+      return part === 'chapa' || part === 'paint';
     }
     if (category === 'bodywork') {
-      return part !== 'bodywork';
+      return part !== 'chapa' && part !== 'paint';
     }
     return false;
   };
@@ -47,6 +47,13 @@ export default function CarVisualizer({ selectedPart, onSelectPart, selectedServ
               </feMerge>
             </filter>
             <filter id="neon-glow-orange" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id="neon-glow-red" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="6" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
@@ -145,45 +152,42 @@ export default function CarVisualizer({ selectedPart, onSelectPart, selectedServ
             <text x="100" y="318" textAnchor="middle" className="part-svg-label">CONFORT & ALARMAS</text>
           </g>
 
-          {/* ZONA 5: CHAPA, PINTURA & ESTÉTICA */}
+          {/* ZONA 5: CHAPA & PARAGOLPES */}
           <g 
-            className={`car-interactive-part ${selectedPart === 'bodywork' ? 'active' : ''} ${isPartDisabled('bodywork') ? 'disabled' : ''} ${getServiceCountForPart('bodywork') > 0 ? 'has-services' : ''}`}
-            onClick={() => handlePartClick('bodywork')}
+            className={`car-interactive-part ${selectedPart === 'chapa' ? 'active' : ''} ${isPartDisabled('chapa') ? 'disabled' : ''} ${getServiceCountForPart('chapa') > 0 ? 'has-services' : ''}`}
+            onClick={() => handlePartClick('chapa')}
           >
-            {/* Zonas de click laterales e inferiores */}
-            <path 
-              d="M 30 120 L 38 120 L 38 280 L 30 280 Z" 
-              fill="transparent" 
-              style={{ cursor: isPartDisabled('bodywork') ? 'default' : 'pointer' }} 
-            />
-            <path 
-              d="M 162 120 L 170 120 L 170 280 L 162 280 Z" 
-              fill="transparent" 
-              style={{ cursor: isPartDisabled('bodywork') ? 'default' : 'pointer' }} 
-            />
-            <rect x="50" y="325" width="100" height="25" fill="transparent" style={{ cursor: isPartDisabled('bodywork') ? 'default' : 'pointer' }} />
+            {/* Front Bumper Area */}
+            <path d="M 40 58 L 160 58 L 150 72 L 50 72 Z" className="glow-path-orange" />
+            {/* Rear Bumper Area */}
+            <path d="M 40 334 L 160 334 L 150 322 L 50 322 Z" className="glow-path-orange" />
+            {/* Left Side Panel Outline */}
+            <path d="M 38 120 L 46 120 L 46 280 L 38 280 Z" className="glow-path-orange" />
+            {/* Right Side Panel Outline */}
+            <path d="M 162 120 L 154 120 L 154 280 L 162 280 Z" className="glow-path-orange" />
             
-            {/* Paneles de puerta */}
-            <path d="M 38 150 L 52 150 M 38 235 L 58 235 M 162 150 L 148 150 M 162 235 L 142 235" stroke="#262a3b" strokeWidth="2" />
-            <rect x="42" y="156" width="6" height="2" rx="0.5" fill="#3a3e52" />
-            <rect x="42" y="241" width="6" height="2" rx="0.5" fill="#3a3e52" />
-            <rect x="152" y="156" width="6" height="2" rx="0.5" fill="#3a3e52" />
-            <rect x="152" y="241" width="6" height="2" rx="0.5" fill="#3a3e52" />
+            <path d="M 38 150 L 46 150 M 38 235 L 46 235 M 162 150 L 154 150 M 162 235 L 154 235" stroke="#262a3b" strokeWidth="2" />
+            
+            <text x="100" y="356" textAnchor="middle" className="part-svg-label font-bold">CHAPA Y PARAGOLPES</text>
+          </g>
 
-            {/* Resaltado del contorno exterior */}
-            <path 
-              d="M 38 90 L 38 310 C 38 335, 162 335, 162 310 L 162 90 C 162 65, 38 65, 38 90 Z" 
-              fill="transparent"
-              className="glow-path-orange" 
-            />
+          {/* ZONA 6: PINTURA & ESTÉTICA */}
+          <g 
+            className={`car-interactive-part ${selectedPart === 'paint' ? 'active' : ''} ${isPartDisabled('paint') ? 'disabled' : ''} ${getServiceCountForPart('paint') > 0 ? 'has-services' : ''}`}
+            onClick={() => handlePartClick('paint')}
+          >
+            {/* Hood (Capot) Surface */}
+            <path d="M 52 74 L 148 74 L 140 114 L 60 114 Z" className="glow-path-red" />
+            {/* Roof / Trunk (Techo y Baúl) Surface */}
+            <path d="M 58 245 L 142 245 L 146 320 L 54 320 Z" className="glow-path-red" />
             
-            <text x="100" y="362" textAnchor="middle" className="part-svg-label font-bold">CHAPA, PINTURA & ESTÉTICA</text>
+            <text x="100" y="372" textAnchor="middle" className="part-svg-label font-bold">PINTURA Y ESTÉTICA</text>
           </g>
 
         </svg>
 
         {/* Indicadores flotantes de contador */}
-        {['battery', 'lighting', 'ecu', 'comfort', 'bodywork'].map(part => {
+        {['battery', 'lighting', 'ecu', 'comfort', 'chapa', 'paint'].map(part => {
           const count = getServiceCountForPart(part);
           if (count === 0 || isPartDisabled(part)) return null;
           return (
