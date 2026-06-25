@@ -426,6 +426,10 @@ export default function App() {
           )}
         </main>
 
+        <footer className="app-footer" style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-secondary)', fontSize: '0.85rem', borderTop: '1px solid var(--border-color)', marginTop: 'auto' }}>
+          <p>Sitio web desarrollado por <strong>Agustin Pollan</strong></p>
+        </footer>
+
         {/* Toast Notification */}
         {toast.show && (
           <div className="toast show">
