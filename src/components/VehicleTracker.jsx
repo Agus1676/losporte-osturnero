@@ -144,7 +144,7 @@ export default function VehicleTracker({ turnsList }) {
                       <div className="timeline-progress-line">
                         <div 
                           className="progress-line-fill" 
-                          style={{ width: `${((Math.max((foundTurn.trackingStage || 1) - 1, 0)) / 5) * 100}%` }}
+                          style={{ '--progress-percent': `${((Math.max((foundTurn.trackingStage || 1) - 1, 0)) / 5) * 100}%` }}
                         />
                       </div>
                       <div className="timeline-steps-container">

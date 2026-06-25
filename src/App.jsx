@@ -324,7 +324,7 @@ export default function App() {
               Cotizador
             </button>
 
-            <span style={{ width: '1px', height: '20px', backgroundColor: 'var(--border-color)', margin: '0 0.25rem' }}></span>
+            <span className="nav-separator" style={{ width: '1px', height: '20px', backgroundColor: 'var(--border-color)', margin: '0 0.25rem' }}></span>
 
             {/* Selector de Temas */}
             <div className="theme-switcher-nav" style={{ display: 'flex', gap: '0.2rem', backgroundColor: 'var(--bg-main)', padding: '0.2rem', borderRadius: '8px', border: '1px solid var(--border-color)', height: '34px', alignItems: 'center' }}>
@@ -357,7 +357,7 @@ export default function App() {
               </button>
             </div>
 
-            <span style={{ width: '1px', height: '20px', backgroundColor: 'var(--border-color)', margin: '0 0.25rem' }}></span>
+            <span className="nav-separator" style={{ width: '1px', height: '20px', backgroundColor: 'var(--border-color)', margin: '0 0.25rem' }}></span>
 
             {view !== 'admin' ? (
               <button 
@@ -367,7 +367,7 @@ export default function App() {
                 style={{ border: '1px solid var(--border-color)' }}
               >
                 <Lock size={14} />
-                Panel Admin
+                ADMIN
               </button>
             ) : (
               <>

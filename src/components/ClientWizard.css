@@ -618,4 +618,15 @@
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+  .wizard-container-pro {
+    padding: 1.25rem !important;
+  }
+  .wizard-footer-pro {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .total-summary-bubble {
+    width: 100%;
+  }
 }

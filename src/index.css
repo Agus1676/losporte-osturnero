@@ -292,6 +292,25 @@ body {
   }
   .view-toggle {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+  .toggle-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+  }
+  .toggle-btn.active {
+    background-color: var(--electric-cyan) !important;
+    color: var(--text-dark) !important;
+  }
+  .nav-separator {
+    display: none !important;
   }
   .app-content {
     padding: 1rem;

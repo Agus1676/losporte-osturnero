@@ -430,3 +430,15 @@
     gap: 1.5rem;
   }
 }
+
+@media (max-width: 768px) {
+  .estimator-services-section {
+    min-height: 280px !important;
+  }
+  .estimator-options-list {
+    max-height: 300px !important;
+  }
+  .estimator-visualizer-section {
+    padding: 1rem !important;
+  }
+}
