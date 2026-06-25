@@ -1,0 +1,295 @@
+.car-visualizer-card {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  max-height: 480px;
+  height: 480px;
+  overflow: hidden;
+}
+
+.visualizer-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 240px;
+}
+
+/* Hover y Selección de Partes del Auto */
+.car-interactive-part {
+  cursor: pointer;
+  pointer-events: bounding-box;
+  transition: all 0.4s ease;
+}
+
+/* Estado Deshabilitado por Categoría */
+.car-interactive-part.disabled {
+  opacity: 0.12 !important;
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+.part-svg-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  fill: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.glow-path-cyan, .glow-path-yellow, .glow-path-orange {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 2.5;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Hover States */
+.car-interactive-part:not(.disabled):hover .part-svg-label {
+  fill: var(--text-primary);
+  opacity: 1;
+}
+
+.car-interactive-part:not(.disabled):hover .glow-path-cyan {
+  stroke: var(--electric-cyan);
+  fill: rgba(0, 240, 255, 0.04);
+}
+
+.car-interactive-part:not(.disabled):hover .glow-path-yellow {
+  stroke: var(--neon-yellow);
+  fill: rgba(255, 214, 10, 0.04);
+}
+
+.car-interactive-part:not(.disabled):hover .glow-path-orange {
+  stroke: var(--neon-orange);
+  fill: rgba(255, 159, 10, 0.04);
+}
+
+/* Active / Selected States */
+.car-interactive-part.active .part-svg-label {
+  fill: var(--text-primary);
+  opacity: 1;
+}
+
+.car-interactive-part.active .glow-path-cyan {
+  stroke: var(--electric-cyan);
+  fill: rgba(0, 240, 255, 0.1);
+  filter: url(#neon-glow-cyan);
+}
+
+.car-interactive-part.active .glow-path-yellow {
+  stroke: var(--neon-yellow);
+  fill: rgba(255, 214, 10, 0.1);
+  filter: url(#neon-glow-yellow);
+}
+
+.car-interactive-part.active .glow-path-orange {
+  stroke: var(--neon-orange);
+  fill: rgba(255, 159, 10, 0.08);
+  filter: url(#neon-glow-orange);
+}
+
+/* Has Services Added States */
+.car-interactive-part.has-services:not(.active):not(.disabled) .glow-path-cyan {
+  stroke: var(--electric-cyan);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  fill: rgba(0, 240, 255, 0.02);
+}
+
+.car-interactive-part.has-services:not(.active):not(.disabled) .glow-path-yellow {
+  stroke: var(--neon-yellow);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  fill: rgba(255, 214, 10, 0.02);
+}
+
+.car-interactive-part.has-services:not(.active):not(.disabled) .glow-path-orange {
+  stroke: var(--neon-orange);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  fill: rgba(255, 159, 10, 0.02);
+}
+
+/* Especializaciones Gráficas */
+
+/* Batería */
+.battery-body {
+  fill: #2c2f3f;
+  stroke: var(--border-color);
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+
+.battery-sign {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  fill: var(--text-secondary);
+  user-select: none;
+  pointer-events: none;
+}
+
+.car-interactive-part[class*="battery"]:not(.disabled):hover .battery-body,
+.car-interactive-part.active[class*="battery"] .battery-body {
+  fill: #393e54;
+  stroke: var(--electric-cyan);
+}
+
+/* Faros y Luces */
+.headlight-beam {
+  fill: transparent;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.taillight-bulb {
+  fill: #3a1515;
+  stroke: #1a0808;
+  transition: all 0.3s ease;
+}
+
+.headlight-bulb {
+  stroke: #2c2f3f;
+  transition: all 0.3s ease;
+}
+
+.car-interactive-part[class*="lighting"]:not(.disabled):hover .headlight-bulb,
+.car-interactive-part.active[class*="lighting"] .headlight-bulb {
+  stroke: var(--neon-yellow);
+}
+
+.car-interactive-part.active[class*="lighting"] .headlight-beam {
+  fill: url(#glow);
+  opacity: 0.15;
+  filter: url(#neon-glow-yellow);
+}
+
+.car-interactive-part.active[class*="lighting"] .taillight-bulb {
+  fill: var(--danger-red);
+  filter: drop-shadow(0 0 4px var(--danger-red));
+}
+
+/* ECU */
+.ecu-box {
+  fill: #2c2f3f;
+  stroke: var(--border-color);
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+
+.ecu-core {
+  opacity: 0.3;
+  transition: all 0.3s ease;
+}
+
+.car-interactive-part[class*="ecu"]:not(.disabled):hover .ecu-box,
+.car-interactive-part.active[class*="ecu"] .ecu-box {
+  fill: #213547;
+  stroke: var(--electric-cyan);
+}
+
+.car-interactive-part.active[class*="ecu"] .ecu-core {
+  opacity: 1;
+  filter: drop-shadow(0 0 5px var(--electric-cyan));
+  animation: pulse-core 1.5s infinite alternate;
+}
+
+@keyframes pulse-core {
+  0% { r: 3.5; opacity: 0.7; }
+  100% { r: 5; opacity: 1; }
+}
+
+/* Confort y Alarmas Waves */
+.wifi-wave-l, .wifi-wave-r {
+  opacity: 0.3;
+  transition: all 0.3s ease;
+}
+
+.car-interactive-part.active[class*="comfort"] .wifi-wave-l {
+  stroke: var(--neon-yellow);
+  animation: pulse-wave-l 1s infinite;
+}
+
+.car-interactive-part.active[class*="comfort"] .wifi-wave-r {
+  stroke: var(--neon-yellow);
+  animation: pulse-wave-r 1s infinite;
+}
+
+@keyframes pulse-wave-l {
+  0% { opacity: 0.2; transform: scale(1) translate(0, 0); }
+  50% { opacity: 1; stroke-width: 2; }
+  100% { opacity: 0; transform: scale(1.1) translate(-2px, 0); }
+}
+
+@keyframes pulse-wave-r {
+  0% { opacity: 0.2; transform: scale(1) translate(0, 0); }
+  50% { opacity: 1; stroke-width: 2; }
+  100% { opacity: 0; transform: scale(1.1) translate(2px, 0); }
+}
+
+/* Badges flotantes */
+.part-badge-count {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  border: 1.5px solid var(--bg-main);
+  animation: badge-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  pointer-events: none;
+}
+
+@keyframes badge-pop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.badge-battery {
+  background-color: var(--electric-cyan);
+  box-shadow: var(--cyan-glow);
+  top: 95px;
+  left: 30px;
+}
+
+.badge-lighting {
+  background-color: var(--neon-yellow);
+  box-shadow: var(--yellow-glow);
+  top: 45px;
+  right: 25px;
+}
+
+.badge-ecu {
+  background-color: var(--electric-cyan);
+  box-shadow: var(--cyan-glow);
+  top: 155px;
+  right: 35px;
+}
+
+.badge-comfort {
+  background-color: var(--neon-yellow);
+  box-shadow: var(--yellow-glow);
+  bottom: 155px;
+  left: 30px;
+}
+
+.badge-bodywork {
+  background-color: var(--neon-orange);
+  box-shadow: var(--yellow-glow);
+  bottom: 95px;
+  right: 25px;
+}

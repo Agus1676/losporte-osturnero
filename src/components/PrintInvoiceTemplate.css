@@ -1,0 +1,346 @@
+/* ==========================================================================
+   LOS PORTEÑOS - Ficha de Trabajo / Factura PDF (Estilos A4)
+   ========================================================================== */
+
+.invoice-print-container {
+  background-color: #ffffff;
+  color: #111111;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+}
+
+/* Header */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.invoice-company {
+  max-width: 60%;
+}
+
+.invoice-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.invoice-logo .lightning-icon {
+  font-size: 24px;
+  color: #ff9f0a; /* Orange highlight */
+}
+
+.invoice-logo h2 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #111111;
+}
+
+.company-desc {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.company-details {
+  font-size: 11px;
+  color: #777777;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.invoice-title-block {
+  text-align: right;
+}
+
+.invoice-badge {
+  background-color: #111111;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.invoice-meta-item {
+  font-size: 12px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.invoice-meta-item span {
+  color: #666666;
+}
+
+.invoice-meta-item strong {
+  color: #111111;
+  font-family: monospace;
+}
+
+.invoice-divider {
+  height: 2px;
+  background-color: #111111;
+  margin: 15px 0 25px 0;
+}
+
+/* Detalles de cliente y auto */
+.invoice-grid-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.details-box {
+  background-color: #fcfcfc;
+  border: 1px solid #f0f0f0;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.details-box h3 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #555555;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 6px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.detail-row span {
+  color: #666666;
+}
+
+.detail-row strong {
+  color: #111111;
+}
+
+.plate-txt {
+  background-color: #e2e8f0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+}
+
+/* Tabla de Servicios */
+.invoice-services-table {
+  margin-bottom: 30px;
+}
+
+.invoice-services-table h3 {
+  font-size: 12px;
+  font-weight: 800;
+  color: #555555;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.invoice-services-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoice-services-table th {
+  background-color: #f7f7f9;
+  border-bottom: 2px solid #eaeaea;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #555555;
+  text-transform: uppercase;
+}
+
+.invoice-services-table td {
+  padding: 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #eaeaea;
+  color: #333333;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Observaciones */
+.invoice-notes-section {
+  background-color: #fff9f0;
+  border: 1px dashed #ffd8a8;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 30px;
+}
+
+.invoice-notes-section h3 {
+  font-size: 12px;
+  font-weight: 800;
+  color: #c97c14;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.invoice-notes-section p {
+  font-size: 12px;
+  color: #5c4424;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Totales */
+.invoice-totals-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 40px;
+}
+
+.totals-box {
+  width: 300px;
+}
+
+.total-row-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  color: #666666;
+}
+
+.total-row-item.grand-total {
+  border-top: 2px solid #111111;
+  padding-top: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111111;
+}
+
+/* Términos */
+.invoice-terms {
+  margin-bottom: 40px;
+}
+
+.invoice-terms h3 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #666666;
+  margin-top: 0;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.invoice-terms ul {
+  padding-left: 15px;
+  margin: 0;
+}
+
+.invoice-terms li {
+  font-size: 10.5px;
+  color: #777777;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* Firmas y Barcode */
+.invoice-footer-signatures {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 30px;
+}
+
+.signature-area {
+  width: 200px;
+  text-align: center;
+}
+
+.sig-line {
+  border-bottom: 1.5px solid #cccccc;
+  margin-bottom: 8px;
+  height: 50px;
+}
+
+.signature-area span {
+  font-size: 11px;
+  color: #666666;
+  font-weight: 600;
+}
+
+/* Barcode */
+.barcode-print-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.barcode-stripes {
+  display: flex;
+  height: 35px;
+  margin-bottom: 4px;
+}
+
+.barcode-stripes span {
+  width: 2px;
+  background-color: #111111;
+  margin-right: 2px;
+}
+
+.barcode-stripes span:nth-child(2n) {
+  width: 4px;
+}
+
+.barcode-stripes span:nth-child(3n) {
+  width: 1px;
+}
+
+.barcode-txt {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #111111;
+  font-weight: 700;
+}
+
+/* Print styling modifications to force clean rendering */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #000000 !important;
+  }
+  .invoice-print-container {
+    border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+}

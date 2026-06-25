@@ -1,0 +1,920 @@
+.admin-dashboard-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* KPIs */
+.admin-kpis-pro {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.kpi-card-pro {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: var(--card-shadow);
+}
+
+.kpi-icon-pro {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+}
+
+.bg-blue {
+  background-color: rgba(0, 114, 255, 0.08);
+  color: var(--electric-blue);
+  border-color: rgba(0, 114, 255, 0.15);
+}
+
+.bg-yellow {
+  background-color: rgba(255, 214, 10, 0.08);
+  color: var(--neon-yellow);
+  border-color: rgba(255, 214, 10, 0.15);
+}
+
+.bg-green {
+  background-color: rgba(48, 209, 88, 0.08);
+  color: var(--success-green);
+  border-color: rgba(48, 209, 88, 0.15);
+}
+
+.kpi-data-pro {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-title-pro {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.kpi-data-pro h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.mono-text {
+  font-family: var(--font-mono);
+  color: var(--electric-cyan) !important;
+}
+
+/* ==========================================================================
+   ACORDEÓN DE ESTADÍSTICAS Y GRÁFICOS
+   ========================================================================== */
+.stats-collapsible-container {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.stats-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.stats-accordion-header:hover {
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.stats-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.stats-accordion-title h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-accordion-content {
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem;
+  background-color: rgba(10, 11, 13, 0.5);
+  overflow: hidden;
+}
+
+.stats-charts-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2.5rem;
+}
+
+.chart-wrapper {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-wrapper h5 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+}
+
+/* Donut SVG */
+.donut-svg-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+}
+
+.donut-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.donut-center-text strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--electric-cyan);
+}
+
+.donut-center-text span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.chart-legend div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.cyan {
+  background-color: var(--electric-cyan);
+  box-shadow: var(--cyan-glow);
+}
+
+.legend-dot.orange {
+  background-color: var(--neon-orange);
+  box-shadow: 0 0 8px rgba(255, 159, 10, 0.4);
+}
+
+/* Gráfico de Barras */
+.bar-chart-container {
+  width: 100%;
+  padding-top: 0.5rem;
+}
+
+.svg-bar-rect {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-origin: bottom;
+  cursor: pointer;
+}
+
+.svg-bar-rect:hover {
+  filter: brightness(1.2) drop-shadow(0 0 5px var(--electric-cyan));
+}
+
+.bar-value-popup {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.bar-group:hover .bar-value-popup {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   KANBAN BOARD
+   ========================================================================== */
+.admin-main-grid-pro {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 2rem;
+}
+
+.kanban-wrapper-pro {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 1.75rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-header-pro {
+  margin-bottom: 1.75rem;
+}
+
+.kanban-header-pro h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.kanban-header-pro p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.kanban-columns-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.kanban-column-pro {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 500px;
+  transition: border-color 0.25s ease;
+}
+
+.column-title-pro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.column-title-pro h4 {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.column-badge {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.kanban-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 400px;
+}
+
+/* Tarjeta de Turno Kanban */
+.turn-kanban-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.1rem;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.turn-kanban-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.turn-kanban-card:active {
+  cursor: grabbing;
+}
+
+.card-top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.card-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-wa-notify, .btn-print-invoice {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-wa-notify {
+  background-color: rgba(48, 209, 88, 0.08);
+  border: 1px solid rgba(48, 209, 88, 0.25);
+  color: var(--success-green);
+}
+
+.btn-wa-notify:hover {
+  background-color: var(--success-green);
+  color: var(--text-dark);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.3);
+}
+
+.btn-print-invoice {
+  background-color: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  color: var(--electric-cyan);
+}
+
+.btn-print-invoice:hover {
+  background-color: var(--electric-cyan);
+  color: var(--text-dark);
+  box-shadow: var(--cyan-glow);
+}
+
+.order-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background-color: var(--bg-main);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.time-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--electric-cyan);
+}
+
+.turn-kanban-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.card-car-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.plate-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--neon-yellow);
+  background-color: rgba(255, 214, 10, 0.05);
+  border: 1px solid rgba(255, 214, 10, 0.15);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.model-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.card-service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.service-bubble {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background-color: rgba(0, 240, 255, 0.06);
+  color: var(--electric-cyan);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1.5px solid rgba(0, 240, 255, 0.15);
+}
+
+.service-bubble.blue {
+  background-color: rgba(0, 114, 255, 0.06);
+  color: #66b2ff;
+  border-color: rgba(0, 114, 255, 0.2);
+}
+
+.service-bubble.green {
+  background-color: rgba(48, 209, 88, 0.06);
+  color: var(--success-green);
+  border-color: rgba(48, 209, 88, 0.2);
+}
+
+.service-bubble.orange {
+  background-color: rgba(255, 159, 10, 0.06);
+  color: var(--neon-orange);
+  border-color: rgba(255, 159, 10, 0.2);
+}
+
+/* MICRO-ESTADOS DE TRABAJO (En Reparación) */
+.card-sub-steps-indicator {
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sub-step-bullet {
+  background: none;
+  border: 1.5px solid var(--border-color);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.sub-step-bullet span {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+
+.sub-step-bullet:hover {
+  border-color: var(--text-secondary);
+}
+
+.sub-step-bullet.active {
+  border-color: var(--electric-cyan);
+  box-shadow: var(--cyan-glow);
+}
+
+.sub-step-bullet.active span {
+  background-color: var(--electric-cyan);
+}
+
+.active-sub-step-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Columna en reparación especial */
+.turn-kanban-card.in-repair {
+  border-left: 3.5px solid var(--electric-blue);
+}
+
+.turn-kanban-card.is-done {
+  border-left: 3.5px solid var(--success-green);
+}
+
+/* Side Cards */
+.admin-side-grid-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.side-card-pro {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+}
+
+.side-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.side-icon {
+  color: var(--electric-cyan);
+  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.2));
+}
+
+.side-icon-live {
+  color: var(--danger-red);
+  filter: drop-shadow(0 0 4px rgba(255, 69, 58, 0.25));
+  animation: beacon 1.5s infinite alternate;
+}
+
+@keyframes beacon {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+.side-card-header h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+}
+
+/* Medidor de Elevadores */
+.occupancy-info-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.occupancy-gauge-bg {
+  height: 12px;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.occupancy-gauge-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.occupancy-hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Logs Monitor */
+.monitor-logs-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+.log-item-pro {
+  background-color: var(--bg-main);
+  border-left: 3px solid var(--electric-cyan);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.log-time-pro {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.log-text-pro {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-logs {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 3rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   MODAL MOCKUP WHATSAPP
+   ========================================================================== */
+.wa-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.wa-modal-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 720px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.wa-modal-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.wa-modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.wa-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.wa-close-btn:hover {
+  color: var(--text-primary);
+}
+
+.wa-modal-body {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* Teléfono Mockup */
+.wa-mockup-phone {
+  background-color: #0b0c10;
+  border: 8px solid #2a2e3d;
+  border-radius: 36px;
+  height: 380px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  overflow: hidden;
+  position: relative;
+}
+
+.wa-mockup-phone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 15px;
+  background-color: #2a2e3d;
+  border-radius: 0 0 10px 10px;
+  z-index: 10;
+}
+
+.phone-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #0d1418;
+  background-image: radial-gradient(rgba(255,255,255,0.01) 1px, transparent 0);
+  background-size: 8px 8px;
+}
+
+.phone-header {
+  background-color: #075e54;
+  padding: 1.25rem 0.75rem 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #ffffff;
+}
+
+.phone-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--electric-blue);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-contact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-contact-info strong {
+  font-size: 0.8rem;
+  line-height: 1.1;
+}
+
+.phone-contact-info span {
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.phone-chat-area {
+  flex: 1;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  justify-content: flex-end;
+}
+
+.chat-bubble-received, .chat-bubble-sent {
+  max-width: 85%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  line-height: 1.3;
+}
+
+.chat-bubble-received {
+  background-color: #1f2c34;
+  color: #e9edef;
+  align-self: flex-start;
+  border-top-left-radius: 0;
+}
+
+.chat-bubble-sent {
+  background-color: #005c4b;
+  color: #e9edef;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.chat-time-tick {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Formulario de Acción */
+.wa-action-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wa-action-details h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.wa-action-details p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.wa-text-preview {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  width: 100%;
+  height: 110px;
+  resize: none;
+  outline: none;
+}
+
+.wa-text-preview:focus {
+  border-color: var(--electric-cyan);
+}
+
+.wa-actions-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.copy-btn-wa, .send-btn-wa {
+  font-size: 0.85rem !important;
+  padding: 0.7rem 1rem !important;
+  border-radius: 10px !important;
+}
+
+.send-btn-wa {
+  background: linear-gradient(135deg, #25d366, #128c7e) !important;
+  color: #ffffff !important;
+}
+
+.send-btn-wa:hover {
+  box-shadow: 0 0 10px rgba(37, 211, 102, 0.4) !important;
+}
+
+/* Responsividad */
+@media (max-width: 1200px) {
+  .admin-main-grid-pro {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-kpis-pro {
+    grid-template-columns: 1fr;
+  }
+  .kanban-columns-grid {
+    grid-template-columns: 1fr;
+  }
+  .kanban-column-pro {
+    min-height: auto;
+  }
+  .stats-charts-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .wa-modal-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .wa-mockup-phone {
+    display: none;
+  }
+}

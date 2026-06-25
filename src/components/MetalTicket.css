@@ -1,0 +1,272 @@
+.ticket-wrapper-pro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  perspective: 1000px;
+}
+
+.metal-ticket-pro {
+  background: linear-gradient(135deg, #141724 0%, #0d0f17 100%);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), var(--cyan-glow);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Capa de brillo reflectivo */
+.ticket-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Muescas laterales del ticket */
+.metal-ticket-pro::before, .metal-ticket-pro::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: var(--bg-card); /* Coincide con fondo general del wizard */
+  border-radius: 50%;
+  top: 68%;
+  z-index: 2;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+}
+
+.metal-ticket-pro::before {
+  left: -9px;
+  border-right: 1px solid rgba(0, 240, 255, 0.25);
+}
+
+.metal-ticket-pro::after {
+  right: -9px;
+  border-left: 1px solid rgba(0, 240, 255, 0.25);
+}
+
+/* Header del Ticket */
+.ticket-header-pro {
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
+  border-bottom: 1px dashed rgba(0, 240, 255, 0.25);
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-logo-pro {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+}
+
+.lightning-icon {
+  color: var(--electric-cyan);
+  filter: drop-shadow(0 0 5px var(--electric-cyan));
+  font-size: 1.2rem;
+}
+
+.ticket-badge-electrical {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background-color: var(--electric-cyan);
+  color: var(--text-dark);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 1.5px;
+  box-shadow: var(--cyan-glow);
+}
+
+/* Cuerpo del Ticket */
+.ticket-content-pro {
+  padding: 1.75rem;
+  transform: translateZ(30px); /* Eleva el contenido en el efecto 3D */
+}
+
+.ticket-headline-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.ticket-type-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.ticket-order-id-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--electric-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  background-color: rgba(0, 240, 255, 0.05);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+/* Grilla de información */
+.ticket-info-grid-pro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.info-item-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.info-label-pro {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value-pro {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.plate-highlight {
+  color: var(--neon-yellow);
+  font-family: var(--font-mono);
+  background-color: rgba(255, 214, 10, 0.05);
+  border: 1px solid rgba(255, 214, 10, 0.15);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+/* Divisiones */
+.ticket-divider-pro {
+  border-top: 1px dashed rgba(61, 67, 94, 0.5);
+  margin: 1.5rem 0;
+}
+
+/* Servicios */
+.ticket-diagnostics-list ul {
+  list-style: none;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ticket-diagnostics-list li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.service-name-bullet {
+  color: #c7c7cc;
+}
+
+.service-price-bullet {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.no-services-warning {
+  font-size: 0.85rem;
+  color: var(--danger-red);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Footer del Ticket */
+.ticket-footer-pro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1.5rem;
+}
+
+.price-section-pro {
+  display: flex;
+  flex-direction: column;
+}
+
+.final-price-pro {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--electric-cyan);
+  line-height: 1.1;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* Código de Barras */
+.barcode-section-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.barcode-lines-pro {
+  height: 28px;
+  display: flex;
+  gap: 1.5px;
+  opacity: 0.8;
+}
+
+.barcode-lines-pro span {
+  width: 2px;
+  background-color: var(--text-primary);
+}
+
+.barcode-lines-pro span:nth-child(2n), 
+.barcode-lines-pro span:nth-child(5n) {
+  width: 1px;
+}
+
+.barcode-lines-pro span:nth-child(3n), 
+.barcode-lines-pro span:nth-child(7n) {
+  width: 3.5px;
+}
+
+.barcode-number-pro {
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  letter-spacing: 2.5px;
+}
+
+/* Sello de Garantía */
+.ticket-guarantee-badge {
+  background-color: rgba(48, 209, 88, 0.08);
+  border-top: 1px solid rgba(48, 209, 88, 0.15);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--success-green);
+  border-radius: 0 0 20px 20px;
+}
